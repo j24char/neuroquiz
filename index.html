@@ -1,0 +1,217 @@
+<style>
+  /* Basic Styling for the Quiz - Keep this within the <style> tags */
+  .quiz-container {
+    font-family: Arial, sans-serif;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  .quiz-question {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .quiz-question h4 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.1em;
+  }
+  .quiz-options label {
+    display: block;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+  .quiz-options input[type="radio"] {
+    margin-right: 8px;
+  }
+  .quiz-results {
+    margin-top: 30px;
+    padding: 20px;
+    border-top: 2px solid #ccc;
+    background-color: #eee;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .score-display {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #007bff; /* Blue color for score */
+  }
+  .quiz-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+  }
+  .quiz-button:hover {
+    background-color: #0056b3;
+  }
+  .result-text {
+      margin-top: 15px;
+      line-height: 1.5;
+      text-align: left;
+  }
+</style>
+
+<div class="quiz-container">
+  <h2>🧠 Are You a Super-Spotter or a Status-Quo Navigator?</h2>
+  <p>Rate your experience for each statement using the following scale:</p>
+  <ul>
+      <li><strong>1: Rarely/Never</strong></li>
+      <li><strong>2: Sometimes</strong></li>
+      <li><strong>3: Often/Always</strong></li>
+  </ul>
+  
+  <div id="quiz-questions">
+    <div class="quiz-question">
+      <h4>1. I can easily tell if two people in a conversation have a history or tension, even if they don't say anything explicitly.</h4>
+      <div class="quiz-options" data-score-name="q1">
+        <label><input type="radio" name="q1" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q1" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q1" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <h4>2. If I accidentally break a social rule (e.g., interrupting), I usually notice it immediately and feel compelled to apologize/correct it.</h4>
+      <div class="quiz-options" data-score-name="q2">
+        <label><input type="radio" name="q2" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q2" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q2" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <h4>3. When watching a complex TV drama, I rarely need to pause or rewind to understand a character's motive or implied feeling.</h4>
+      <div class="quiz-options" data-score-name="q3">
+        <label><input type="radio" name="q3" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q3" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q3" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <h4>4. I intuitively know when a meeting or gathering is supposed to end, even without an announced time limit.</h4>
+      <div class="quiz-options" data-score-name="q4">
+        <label><input type="radio" name="q4" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q4" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q4" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <h4>5. Adjusting my tone of voice and vocabulary when speaking to a boss versus a child feels automatic and requires no effort.</h4>
+      <div class="quiz-options" data-score-name="q5">
+        <label><input type="radio" name="q5" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q5" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q5" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <h4>6. I can easily filter out background noise (like a ticking clock or office chatter) when I need to concentrate on a task.</h4>
+      <div class="quiz-options" data-score-name="q6">
+        <label><input type="radio" name="q6" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q6" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q6" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+
+    <div class="quiz-question">
+      <h4>7. I enjoy unexpected changes to my daily schedule and rarely feel disrupted when plans suddenly shift.</h4>
+      <div class="quiz-options" data-score-name="q7">
+        <label><input type="radio" name="q7" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q7" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q7" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <h4>8. I can comfortably wear almost any type of fabric or clothing without it distracting or irritating me.</h4>
+      <div class="quiz-options" data-score-name="q8">
+        <label><input type="radio" name="q8" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q8" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q8" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <h4>9. The sound of a typical crowd, busy traffic, or a strong scent rarely feels physically overwhelming or painful.</h4>
+      <div class="quiz-options" data-score-name="q9">
+        <label><input type="radio" name="q9" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q9" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q9" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <h4>10. I don't rely on specific rituals or repetitive behaviors (like tapping or rocking) to help me regulate my emotions or focus.</h4>
+      <div class="quiz-options" data-score-name="q10">
+        <label><input type="radio" name="q10" value="1"> 1 (Rarely/Never)</label>
+        <label><input type="radio" name="q10" value="2"> 2 (Sometimes)</label>
+        <label><input type="radio" name="q10" value="3"> 3 (Often/Always)</label>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="quiz-button" onclick="calculateScore()">Get Your Results!</button>
+
+  <div class="quiz-results" id="results-section" style="display: none;">
+    <h3>Your Navigator Score:</h3>
+    <div class="score-display" id="final-score">--</div>
+    <div class="result-text" id="result-text-content"></div>
+  </div>
+
+</div>
+
+<script>
+  function calculateScore() {
+    let totalScore = 0;
+    const questions = [
+      'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'
+    ];
+    let allAnswered = true;
+
+    // Sum up the scores
+    for (const qName of questions) {
+      const selected = document.querySelector(`input[name="${qName}"]:checked`);
+      if (selected) {
+        totalScore += parseInt(selected.value);
+      } else {
+        allAnswered = false;
+      }
+    }
+
+    if (!allAnswered) {
+      alert("Please answer all 10 questions to get your results!");
+      return;
+    }
+
+    // Determine the result text
+    let resultText = "";
+    let resultHeader = "";
+
+    if (totalScore >= 25) {
+      resultHeader = "The Status-Quo Navigator";
+      resultText = "<strong>Highly Neurotypical.</strong> You have an incredibly strong internal social compass and sensory system alignment. The world is built to your specifications, allowing you to navigate its rules and rhythms with intuitive ease. You represent the majority experience.";
+    } else if (totalScore >= 18) {
+      resultHeader = "The Flexible Explorer";
+      resultText = "<strong>Mostly Neurotypical.</strong> While you align with most societal norms, you occasionally find yourself puzzled by social situations or sensitive to sensory input. You likely navigate the neurotypical world successfully but appreciate unique perspectives.";
+    } else { // 10-17 Points
+      resultHeader = "The Unique Spotter";
+      resultText = "<strong>Possible Neurodivergent Traits.</strong> You likely find many aspects of the 'typical' world—social, sensory, or routine—challenging or non-intuitive. This score suggests you may process the world in a way that falls outside the neurotypical majority.";
+    }
+
+    // Display the results
+    document.getElementById('final-score').innerText = totalScore + " Points: " + resultHeader;
+    document.getElementById('result-text-content').innerHTML = resultText + 
+      '<p style="margin-top: 15px;"><strong>Thank you for taking the assessment!</strong> The goal of neurodiversity is not to label one style as better, but to recognize the amazing variety in all brains.</p>';
+    document.getElementById('results-section').style.display = 'block';
+
+    // Optional: Scroll to results
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
