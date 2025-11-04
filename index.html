@@ -1,217 +1,365 @@
-<style>
-  /* Basic Styling for the Quiz - Keep this within the <style> tags */
-  .quiz-container {
-    font-family: Arial, sans-serif;
-    max-width: 700px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  .quiz-question {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  }
-  .quiz-question h4 {
-    margin-top: 0;
-    color: #333;
-    font-size: 1.1em;
-  }
-  .quiz-options label {
-    display: block;
-    margin: 5px 0;
-    cursor: pointer;
-  }
-  .quiz-options input[type="radio"] {
-    margin-right: 8px;
-  }
-  .quiz-results {
-    margin-top: 30px;
-    padding: 20px;
-    border-top: 2px solid #ccc;
-    background-color: #eee;
-    border-radius: 6px;
-    text-align: center;
-  }
-  .score-display {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #007bff; /* Blue color for score */
-  }
-  .quiz-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-top: 15px;
-    transition: background-color 0.3s;
-  }
-  .quiz-button:hover {
-    background-color: #0056b3;
-  }
-  .result-text {
-      margin-top: 15px;
-      line-height: 1.5;
-      text-align: left;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Neuro-Spicy Quiz</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for custom colors/theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spicy-dark': '#0f172a', // Slate 900
+                        'spicy-purple': '#a855f7', // Violet 500
+                        'spicy-accent': '#22d3ee', // Cyan 400
+                        'spicy-light': '#f8fafc', // Slate 50
+                    },
+                    boxShadow: {
+                        'neon': '0 0 10px #22d3ee, 0 0 20px #a855f7',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Ensures the background covers the whole area */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* spicy-dark */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-<div class="quiz-container">
-  <h2>Self-Assessment: A Neurodivergent Quiz!</h2>
-  <p>Rate your experience for each statement using the following scale:</p>
-  <ul>
-      <li><strong>1: Rarely/Never</strong></li>
-      <li><strong>2: Sometimes</strong></li>
-      <li><strong>3: Often/Always</strong></li>
-  </ul>
-  
-  <div id="quiz-questions">
-    <div class="quiz-question">
-      <h4>1. I can easily tell if two people in a conversation have a history or tension, even if they don't say anything explicitly.</h4>
-      <div class="quiz-options" data-score-name="q1">
-        <label><input type="radio" name="q1" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q1" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q1" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
-    <div class="quiz-question">
-      <h4>2. If I accidentally break a social rule (e.g., interrupting), I usually notice it immediately and feel compelled to apologize/correct it.</h4>
-      <div class="quiz-options" data-score-name="q2">
-        <label><input type="radio" name="q2" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q2" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q2" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
-    <div class="quiz-question">
-      <h4>3. When watching a complex TV drama, I rarely need to pause or rewind to understand a character's motive or implied feeling.</h4>
-      <div class="quiz-options" data-score-name="q3">
-        <label><input type="radio" name="q3" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q3" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q3" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
-    <div class="quiz-question">
-      <h4>4. I intuitively know when a meeting or gathering is supposed to end, even without an announced time limit.</h4>
-      <div class="quiz-options" data-score-name="q4">
-        <label><input type="radio" name="q4" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q4" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q4" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
-    <div class="quiz-question">
-      <h4>5. Adjusting my tone of voice and vocabulary when speaking to a boss versus a child feels automatic and requires no effort.</h4>
-      <div class="quiz-options" data-score-name="q5">
-        <label><input type="radio" name="q5" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q5" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q5" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
-    <div class="quiz-question">
-      <h4>6. I can easily filter out background noise (like a ticking clock or office chatter) when I need to concentrate on a task.</h4>
-      <div class="quiz-options" data-score-name="q6">
-        <label><input type="radio" name="q6" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q6" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q6" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
+    <!-- Quiz Container -->
+    <div id="quiz-container" class="w-full max-w-lg bg-spicy-dark p-6 md:p-10 rounded-xl shadow-2xl border border-spicy-purple">
 
-    <div class="quiz-question">
-      <h4>7. I enjoy unexpected changes to my daily schedule and rarely feel disrupted when plans suddenly shift.</h4>
-      <div class="quiz-options" data-score-name="q7">
-        <label><input type="radio" name="q7" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q7" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q7" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
-    <div class="quiz-question">
-      <h4>8. I can comfortably wear almost any type of fabric or clothing without it distracting or irritating me.</h4>
-      <div class="quiz-options" data-score-name="q8">
-        <label><input type="radio" name="q8" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q8" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q8" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
-    <div class="quiz-question">
-      <h4>9. The sound of a typical crowd, busy traffic, or a strong scent rarely feels physically overwhelming or painful.</h4>
-      <div class="quiz-options" data-score-name="q9">
-        <label><input type="radio" name="q9" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q9" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q9" value="3"> 3 (Often/Always)</label>
-      </div>
-    </div>
-    <div class="quiz-question">
-      <h4>10. I don't rely on specific rituals or repetitive behaviors (like tapping or rocking) to help me regulate my emotions or focus.</h4>
-      <div class="quiz-options" data-score-name="q10">
-        <label><input type="radio" name="q10" value="1"> 1 (Rarely/Never)</label>
-        <label><input type="radio" name="q10" value="2"> 2 (Sometimes)</label>
-        <label><input type="radio" name="q10" value="3"> 3 (Often/Always)</label>
-      </div>
+        <!-- Header -->
+        <h1 id="quiz-title" class="text-3xl md:text-4xl font-extrabold text-spicy-accent text-center mb-6 leading-tight tracking-wide">
+            The Neuro-Spicy Check-In
+        </h1>
+
+        <!-- Initial State (Welcome) -->
+        <div id="welcome-screen">
+            <p class="text-spicy-light text-lg mb-6 text-center">
+                Welcome to a rapid-fire, low-stakes self-check. Answer quickly based on your **daily lived experience**.
+            </p>
+            <button onclick="startQuiz()" class="w-full py-3 bg-spicy-purple text-spicy-light font-bold text-xl rounded-lg shadow-neon hover:shadow-xl transition duration-300 transform hover:scale-[1.02] active:bg-violet-600">
+                Start the Flow State ⚡
+            </button>
+        </div>
+
+        <!-- Quiz State (Question View) -->
+        <div id="question-screen" class="hidden">
+            <div class="mb-6">
+                <p class="text-sm font-semibold text-spicy-accent uppercase tracking-wider mb-2">
+                    <span id="question-counter">Question 1/10</span>
+                </p>
+                <div class="w-full bg-gray-700 rounded-full h-2.5">
+                    <div id="progress-bar" class="bg-spicy-accent h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <p id="question-text" class="text-spicy-light text-2xl font-bold mb-8 min-h-[5rem] flex items-center">
+                <!-- Question content goes here -->
+            </p>
+
+            <!-- Answer Options -->
+            <div id="answer-options" class="space-y-4">
+                <!-- Buttons injected here by JS -->
+            </div>
+
+            <button id="next-button" onclick="nextQuestion()" class="mt-8 w-full py-3 bg-spicy-purple text-spicy-light font-bold text-lg rounded-lg shadow-md hover:bg-violet-600 transition duration-150 active:scale-[0.98]">
+                Next
+            </button>
+        </div>
+
+        <!-- Result State -->
+        <div id="result-screen" class="hidden text-center">
+            <h2 id="result-title" class="text-3xl font-extrabold text-spicy-accent mb-4">Results Complete!</h2>
+            
+            <p id="score-text" class="text-spicy-light text-xl font-medium mb-6">
+                <!-- Final score goes here -->
+            </p>
+
+            <!-- Final Score Interpretation -->
+            <div id="interpretation" class="p-4 rounded-lg bg-gray-800 text-left mb-6">
+                <h3 class="text-xl font-bold text-spicy-accent mb-2">Your Neuro-Pattern:</h3>
+                <p id="interpretation-text" class="text-spicy-light leading-relaxed">
+                    <!-- Detailed interpretation goes here -->
+                </p>
+            </div>
+            
+            <p class="text-sm text-gray-400 mb-4">
+                Copy the result code below to share your check-in result on Substack.
+            </p>
+
+            <!-- Result Code and Copy Button -->
+            <div class="flex flex-col sm:flex-row gap-2">
+                <textarea id="result-code" readonly class="flex-grow p-3 border border-spicy-purple bg-gray-800 text-spicy-accent font-mono text-xs rounded-lg resize-none h-16"></textarea>
+                <button onclick="copyToClipboard()" class="w-full sm:w-auto px-4 py-3 bg-spicy-accent text-spicy-dark font-bold text-md rounded-lg shadow-lg hover:shadow-neon transition duration-150 active:scale-[0.98]">
+                    Copy Code
+                </button>
+            </div>
+
+            <p id="copy-message" class="text-sm mt-2 text-green-400 hidden">Copied to clipboard!</p>
+            
+            <button onclick="resetQuiz()" class="mt-6 w-full py-2 border border-gray-600 text-gray-400 font-medium rounded-lg hover:bg-gray-800 transition duration-150">
+                Reset Quiz
+            </button>
+        </div>
+        
+        <!-- Error Message Box (Used instead of alert) -->
+        <div id="error-message" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
+            <div class="bg-gray-900 p-6 rounded-lg shadow-2xl border-2 border-red-500 text-center max-w-sm">
+                <p class="text-red-400 font-bold text-lg mb-4">Hold Up!</p>
+                <p class="text-spicy-light mb-6">Please select an answer before moving to the next question.</p>
+                <button onclick="document.getElementById('error-message').classList.add('hidden')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    Got It
+                </button>
+            </div>
+        </div>
+
     </div>
 
-  </div>
+    <!-- JavaScript for Quiz Logic -->
+    <script>
+        const quizContainer = document.getElementById('quiz-container');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const nextButton = document.getElementById('next-button');
+        const progressBar = document.getElementById('progress-bar');
+        const errorMessage = document.getElementById('error-message');
 
-  <button class="quiz-button" onclick="calculateScore()">Get Your Results!</button>
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
 
-  <div class="quiz-results" id="results-section" style="display: none;">
-    <h3>Your Navigator Score:</h3>
-    <div class="score-display" id="final-score">--</div>
-    <div class="result-text" id="result-text-content"></div>
-  </div>
+        // Quiz Data - Questions and Answers
+        const questions = [
+            {
+                q: "I often feel overwhelmed by bright lights, loud noises, or strong smells.",
+                options: [
+                    { text: "Strongly Disagree", value: 0 },
+                    { text: "Disagree", value: 1 },
+                    { text: "Neutral", value: 2 },
+                    { text: "Agree", value: 3 },
+                    { text: "Strongly Agree", value: 4 }
+                ]
+            },
+            {
+                q: "When I start a new task, I often get lost in detail and miss the bigger picture.",
+                options: [
+                    { text: "Strongly Disagree", value: 0 },
+                    { text: "Disagree", value: 1 },
+                    { text: "Neutral", value: 2 },
+                    { text: "Agree", value: 3 },
+                    { text: "Strongly Agree", value: 4 }
+                ]
+            },
+            {
+                q: "I have difficulty maintaining eye contact during conversations.",
+                options: [
+                    { text: "Strongly Disagree", value: 0 },
+                    { text: "Disagree", value: 1 },
+                    { text: "Neutral", value: 2 },
+                    { text: "Agree", value: 3 },
+                    { text: "Strongly Agree", value: 4 }
+                ]
+            },
+            {
+                q: "I rely on routines and consistent structure to manage my day effectively.",
+                options: [
+                    { text: "Strongly Disagree", value: 0 },
+                    { text: "Disagree", value: 1 },
+                    { text: "Neutral", value: 2 },
+                    { text: "Agree", value: 3 },
+                    { text: "Strongly Agree", value: 4 }
+                ]
+            },
+            {
+                q: "I find small talk exhausting and prefer deep, focused conversations.",
+                options: [
+                    { text: "Strongly Disagree", value: 0 },
+                    { text: "Disagree", value: 1 },
+                    { text: "Neutral", value: 2 },
+                    { text: "Agree", value: 3 },
+                    { text: "Strongly Agree", value: 4 }
+                ]
+            }
+            // Add more questions here to reach the desired length (5 questions used for brevity)
+        ];
 
+        // Max possible score is 4 * number of questions
+        const MAX_SCORE = questions.length * 4;
+
+        function startQuiz() {
+            score = 0;
+            currentQuestionIndex = 0;
+            welcomeScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            questionScreen.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            selectedAnswer = null;
+            const qData = questions[currentQuestionIndex];
+
+            // Update question text
+            document.getElementById('question-text').textContent = qData.q;
+
+            // Update progress bar and counter
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            document.getElementById('question-counter').textContent = `Question ${currentQuestionIndex + 1}/${questions.length}`;
+
+            // Update button text
+            nextButton.textContent = currentQuestionIndex === questions.length - 1 ? 'Submit & View Pattern' : 'Next';
+
+            // Render options
+            const optionsDiv = document.getElementById('answer-options');
+            optionsDiv.innerHTML = ''; // Clear previous options
+
+            qData.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option.text;
+                button.value = option.value;
+                button.className = 'w-full px-4 py-3 text-lg font-medium text-spicy-light bg-gray-700 rounded-lg transition duration-150 hover:bg-gray-600 border border-gray-600 text-left focus:outline-none focus:ring-2 focus:ring-spicy-accent focus:ring-offset-2 focus:ring-offset-spicy-dark';
+                
+                button.addEventListener('click', () => {
+                    selectAnswer(button, option.value);
+                });
+
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, value) {
+            selectedAnswer = value;
+            // Highlight the selected button and deselect others
+            const optionsDiv = document.getElementById('answer-options');
+            optionsDiv.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('bg-spicy-accent', 'text-spicy-dark', 'border-spicy-accent');
+                btn.classList.add('bg-gray-700', 'text-spicy-light', 'border-gray-600');
+            });
+
+            button.classList.add('bg-spicy-accent', 'text-spicy-dark', 'border-spicy-accent');
+            button.classList.remove('bg-gray-700', 'text-spicy-light', 'border-gray-600');
+        }
+
+        function nextQuestion() {
+            if (selectedAnswer === null) {
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            score += selectedAnswer;
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function getInterpretation(finalScore) {
+            const ratio = finalScore / MAX_SCORE;
+
+            let interpretation = {
+                title: "",
+                text: "",
+                emoji: ""
+            };
+
+            if (ratio < 0.3) {
+                interpretation.title = "Standard Flow 🌊";
+                interpretation.text = "Your results suggest a generally low level of the traits measured in this self-check. Your brain is likely working on the common settings, with minimal sensory or routine requirements. You are probably quite comfortable with new social situations and sensory environments.";
+                interpretation.emoji = "⚪";
+            } else if (ratio < 0.6) {
+                interpretation.title = "A Bit Zesty 🍋";
+                interpretation.text = "You show several characteristics that indicate unique processing patterns. While you manage to adapt well, you may sometimes experience sensory overload or find social expectations confusing. You benefit from clear structure and focused time.";
+                interpretation.emoji = "🟡";
+            } else { // ratio >= 0.6
+                interpretation.title = "Full Neuro-Spicy 🔥";
+                interpretation.text = "Your responses strongly suggest a high degree of neurodivergent traits, especially regarding sensory processing, executive function, and social communication. Self-advocacy and environment modification (like noise-cancelling headphones or planning) are likely crucial to your daily well-being.";
+                interpretation.emoji = "🟣";
+            }
+
+            return interpretation;
+        }
+
+        function showResults() {
+            // Final progress bar update
+            progressBar.style.width = '100%';
+
+            questionScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const interpretationData = getInterpretation(score);
+            const scorePercent = Math.round((score / MAX_SCORE) * 100);
+
+            document.getElementById('score-text').textContent = `Your final check-in score is ${score} out of ${MAX_SCORE} (${scorePercent}%).`;
+            
+            document.getElementById('result-title').textContent = interpretationData.title;
+            document.getElementById('interpretation-text').textContent = interpretationData.text;
+
+            // Generate the embeddable Substack result code
+            const embedCode = `
+<div style="background-color:#0f172a; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #a855f7; max-width: 400px; margin: 2rem auto;">
+    <p style="font-family: Inter, sans-serif; color: #22d3ee; font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 0.5rem;">My Neuro-Pattern: ${interpretationData.title}</p>
+    <p style="font-family: Inter, sans-serif; color: #f8fafc; font-size: 1.125rem; text-align: center; margin-bottom: 1rem;">
+        Score: ${score} / ${MAX_SCORE} (${scorePercent}%)
+    </p>
+    <p style="font-family: Inter, sans-serif; color: #a855f7; font-size: 0.875rem; text-align: center;">
+        ${interpretationData.emoji} ${interpretationData.text.split('.')[0]}...
+    </p>
 </div>
+            `.trim(); // Using inline CSS for Substack compatibility
 
-<script>
-  function calculateScore() {
-    let totalScore = 0;
-    const questions = [
-      'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'
-    ];
-    let allAnswered = true;
+            document.getElementById('result-code').value = embedCode;
+        }
 
-    // Sum up the scores
-    for (const qName of questions) {
-      const selected = document.querySelector(`input[name="${qName}"]:checked`);
-      if (selected) {
-        totalScore += parseInt(selected.value);
-      } else {
-        allAnswered = false;
-      }
-    }
+        function copyToClipboard() {
+            const textarea = document.getElementById('result-code');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile devices
 
-    if (!allAnswered) {
-      alert("Please answer all 10 questions to get your results!");
-      return;
-    }
+            try {
+                // Use execCommand('copy') as it has better support in iFrames
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    const msg = document.getElementById('copy-message');
+                    msg.classList.remove('hidden');
+                    setTimeout(() => msg.classList.add('hidden'), 3000);
+                }
+            } catch (err) {
+                console.error('Copy failed:', err);
+                // Fallback for environments where execCommand is blocked
+                const msg = document.getElementById('copy-message');
+                msg.textContent = "Copy failed. Please copy manually.";
+                msg.classList.remove('hidden');
+                msg.classList.remove('text-green-400');
+                msg.classList.add('text-red-400');
+            }
+        }
+        
+        function resetQuiz() {
+            window.location.reload();
+        }
 
-    // Determine the result text
-    let resultText = "";
-    let resultHeader = "";
-
-    if (totalScore >= 25) {
-      resultHeader = "The Status-Quo Navigator";
-      resultText = "<strong>Highly Neurotypical.</strong> You have an incredibly strong internal social compass and sensory system alignment. The world is built to your specifications, allowing you to navigate its rules and rhythms with intuitive ease. You represent the majority experience.";
-    } else if (totalScore >= 18) {
-      resultHeader = "The Flexible Explorer";
-      resultText = "<strong>Mostly Neurotypical.</strong> While you align with most societal norms, you occasionally find yourself puzzled by social situations or sensitive to sensory input. You likely navigate the neurotypical world successfully but appreciate unique perspectives.";
-    } else { // 10-17 Points
-      resultHeader = "The Unique Spotter";
-      resultText = "<strong>Possible Neurodivergent Traits.</strong> You likely find many aspects of the 'typical' world—social, sensory, or routine—challenging or non-intuitive. This score suggests you may process the world in a way that falls outside the neurotypical majority.";
-    }
-
-    // Display the results
-    document.getElementById('final-score').innerText = totalScore + " Points: " + resultHeader;
-    document.getElementById('result-text-content').innerHTML = resultText + 
-      '<p style="margin-top: 15px;"><strong>Thank you for taking the assessment!</strong> The goal of neurodiversity is not to label one style as better, but to recognize the amazing variety in all brains.</p>';
-    document.getElementById('results-section').style.display = 'block';
-
-    // Optional: Scroll to results
-    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
-  }
-</script>
+        // Initialize quiz state on load
+        window.onload = () => {
+            // Ensure we start on the welcome screen
+            welcomeScreen.classList.remove('hidden');
+            questionScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+        };
+    </script>
+</body>
+</html>
