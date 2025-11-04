@@ -93,19 +93,19 @@
                 </p>
             </div>
             
-            <p class="text-sm text-gray-400 mb-4">
+            <!-- <p class="text-sm text-gray-400 mb-4">
                 Copy the result code below to share your check-in result on Substack.
-            </p>
+            </p> -->
 
             <!-- Result Code and Copy Button -->
-            <div class="flex flex-col sm:flex-row gap-2">
+            <!-- <div class="flex flex-col sm:flex-row gap-2">
                 <textarea id="result-code" readonly class="flex-grow p-3 border border-spicy-purple bg-gray-800 text-spicy-accent font-mono text-xs rounded-lg resize-none h-16"></textarea>
                 <button onclick="copyToClipboard()" class="w-full sm:w-auto px-4 py-3 bg-spicy-accent text-spicy-dark font-bold text-md rounded-lg shadow-lg hover:shadow-neon transition duration-150 active:scale-[0.98]">
                     Copy Code
                 </button>
             </div>
 
-            <p id="copy-message" class="text-sm mt-2 text-green-400 hidden">Copied to clipboard!</p>
+            <p id="copy-message" class="text-sm mt-2 text-green-400 hidden">Copied to clipboard!</p> -->
             
             <button onclick="resetQuiz()" class="mt-6 w-full py-2 border border-gray-600 text-gray-400 font-medium rounded-lg hover:bg-gray-800 transition duration-150">
                 Reset Quiz
@@ -360,17 +360,17 @@
             document.getElementById('interpretation-text').textContent = interpretationData.text;
 
             // Generate the embeddable Substack result code
-            const embedCode = `
-<div style="background-color:#0f172a; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #a855f7; max-width: 400px; margin: 2rem auto;">
-    <p style="font-family: Inter, sans-serif; color: #22d3ee; font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 0.5rem;">My Neuro-Pattern: ${interpretationData.title}</p>
-    <p style="font-family: Inter, sans-serif; color: #f8fafc; font-size: 1.125rem; text-align: center; margin-bottom: 1rem;">
-        Score: ${score} / ${MAX_SCORE} (${scorePercent}%)
-    </p>
-    <p style="font-family: Inter, sans-serif; color: #a855f7; font-size: 0.875rem; text-align: center;">
-        ${interpretationData.emoji} ${interpretationData.text.split('.')[0]}...
-    </p>
-</div>
-            `.trim(); // Using inline CSS for Substack compatibility
+//             const embedCode = `
+// <div style="background-color:#0f172a; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #a855f7; max-width: 400px; margin: 2rem auto;">
+//     <p style="font-family: Inter, sans-serif; color: #22d3ee; font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 0.5rem;">My Neuro-Pattern: ${interpretationData.title}</p>
+//     <p style="font-family: Inter, sans-serif; color: #f8fafc; font-size: 1.125rem; text-align: center; margin-bottom: 1rem;">
+//         Score: ${score} / ${MAX_SCORE} (${scorePercent}%)
+//     </p>
+//     <p style="font-family: Inter, sans-serif; color: #a855f7; font-size: 0.875rem; text-align: center;">
+//         ${interpretationData.emoji} ${interpretationData.text.split('.')[0]}...
+//     </p>
+// </div>
+//             `.trim(); // Using inline CSS for Substack compatibility
 
             document.getElementById('result-code').value = embedCode;
         }
